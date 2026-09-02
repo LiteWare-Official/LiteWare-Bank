@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liteware Bank · Admin</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="adminLoginScreen" class="auth-screen">
+  <h1>Admin</h1>
+  <div class="sub">Liteware Bank back office.</div>
+  <form id="adminLoginForm" style="margin-top:22px">
+    <div class="field">
+      <label for="adminUsername">Username</label>
+      <input id="adminUsername" type="text" required autocomplete="username">
+    </div>
+    <div class="field">
+      <label for="adminPassword">Password</label>
+      <input id="adminPassword" type="password" required autocomplete="current-password">
+    </div>
+    <button class="btn" type="submit">Sign in</button>
+    <div class="note error" id="adminLoginNote"></div>
+  </form>
+  <pre id="debugBox" style="display:none;margin-top:20px;padding:12px;background:#12161B;color:#8FE3B8;font-size:11px;white-space:pre-wrap;border:1px solid #D9D3C4;max-height:240px;overflow:auto"></pre>
+</div>
+
+<div id="adminScreen" style="display:none;max-width:900px;margin:0 auto;padding:24px 20px 60px">
+  <div class="topbar" style="border:none;padding:0 0 20px">
+    <div class="mark">Liteware <span>Bank</span> — Admin</div>
+    <button class="linklike" id="adminLogout">Sign out</button>
+  </div>
+
+  <div class="section-head"><h2>Accounts</h2></div>
+  <div class="field" style="max-width:320px">
+    <input id="userSearch" type="text" placeholder="Search by name or account number">
+  </div>
+  <table class="ledger-table" style="margin-bottom:34px">
+    <thead><tr><th>Name</th><th>Account</th><th>Balance</th><th>Status</th><th></th></tr></thead>
+    <tbody id="usersBody"></tbody>
+  </table>
+
+  <div class="section-head"><h2>Recent transactions</h2></div>
+  <table class="ledger-table">
+    <thead><tr><th>From</th><th>To</th><th>Amount</th><th>Type</th><th>When</th></tr></thead>
+    <tbody id="txBody"></tbody>
+  </table>
+</div>
+
+<div class="loading-overlay" id="adjustModal" style="background:rgba(18,22,27,.6)">
+  <div style="background:#F6F4EE;padding:24px;max-width:340px;width:90%;border:1px solid #D9D3C4">
+    <div class="section-head"><h2 id="adjustName" style="color:#12161B;font-size:14px"></h2></div>
+    <form id="adjustForm">
+      <div class="field">
+        <label for="adjustAmount">Amount (USD) — use a negative number to debit</label>
+        <input id="adjustAmount" type="number" step="0.01" required>
+      </div>
+      <button class="btn" type="submit">Apply adjustment</button>
+      <button class="btn secondary" type="button" id="closeAdjust" style="margin-top:8px">Cancel</button>
+      <div class="note error" id="adjustNote"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Catches errors even if admin.js fails to load at all (e.g. bad path,
+  // syntax error, blocked module) — shows them on-screen since there's
+  // no way to open dev tools on this device.
+  window.addEventListener("error", (e) => {
+    const box = document.getElementById("debugBox");
+    if (box) {
+      box.style.display = "block";
+      box.textContent += "PAGE ERROR: " + e.message + " (" + (e.filename || "") + ":" + e.lineno + ")\n";
+    }
+  });
+</script>
+<script type="module" src="admin.js"
+  onerror="document.getElementById('debugBox').style.display='block'; document.getElementById('debugBox').textContent += 'FAILED TO LOAD admin.js — check the file exists at this exact path.\n'">
+</script>
+</body>
+</html>
