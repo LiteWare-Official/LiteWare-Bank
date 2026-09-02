@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liteware Bank</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+
+<div id="authScreen" class="auth-screen">
+  <h1>Liteware Bank</h1>
+  <div class="sub">Send and receive money by QR code.</div>
+  <div class="auth-toggle">
+    <span id="toggleLogin">Sign in</span>
+    <span id="toggleRegister">Create account</span>
+  </div>
+  <form id="authForm" data-mode="login" style="margin-top:22px">
+    <div class="field" id="authNameField" style="display:none">
+      <label for="authName">Full name</label>
+      <input id="authName" type="text" autocomplete="name">
+    </div>
+    <div class="field">
+      <label for="authEmail">Email</label>
+      <input id="authEmail" type="email" required autocomplete="email">
+    </div>
+    <div class="field">
+      <label for="authPassword">Password</label>
+      <input id="authPassword" type="password" required minlength="6" autocomplete="current-password">
+    </div>
+    <button class="btn" id="authSubmit" type="submit">Sign in</button>
+    <div class="note error" id="authNote"></div>
+  </form>
+</div>
+
+<div id="appScreen" class="shell" style="display:none">
+  <div class="topbar">
+    <div class="mark">Liteware <span>Bank</span></div>
+    <button class="linklike" id="logoutBtn">Sign out</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="view active" id="view-dashboard">
+    <div class="passbook">
+      <div class="label">Available balance · <span id="greetName"></span></div>
+      <div class="balance figure" id="balanceFigure"></div>
+      <div class="acct" id="acctNumber"></div>
+      <div class="status" id="statusPill"></div>
+    </div>
+    <div class="section-head"><h2>Recent activity</h2></div>
+    <div class="ledger" id="ledgerList"></div>
+  </div>
+
+  <!-- Receive -->
+  <div class="view" id="view-receive">
+    <div class="section-head"><h2>Receive money</h2></div>
+    <div class="qr-wrap"><div id="qrReceive"></div></div>
+    <div class="note">Show this code to the sender. Anyone who scans it can pay directly into your account — share only with people you trust.</div>
+  </div>
+
+  <!-- Pay -->
+  <div class="view" id="view-pay">
+    <div class="section-head"><h2>Pay by QR</h2></div>
+    <div id="reader"></div>
+    <div class="note" id="scanNote">Point your camera at the recipient's receive code.</div>
+
+    <div class="field" style="margin-top:16px">
+      <label for="qrFileInput">Or select a QR code image from your files</label>
+      <input id="qrFileInput" type="file" accept="image/*">
+    </div>
+    <div class="note error" id="fileScanNote"></div>
+
+    <form id="payForm" style="display:none;margin-top:18px">
+      <div class="note">Paying account <strong id="payTargetAcct"></strong></div>
+      <div class="field" style="margin-top:14px">
+        <label for="payAmount">Amount (USD)</label>
+        <input id="payAmount" type="number" min="0.01" step="0.01" required autofocus>
+      </div>
+      <button class="btn" type="submit">Confirm payment</button>
+      <button class="btn secondary" type="button" id="cancelPay" style="margin-top:8px">Cancel</button>
+      <div class="note error" id="payNote"></div>
+    </form>
+  </div>
+
+  <div class="tabs">
+    <button data-tab="dashboard" class="active">Balance</button>
+    <button data-tab="receive">Receive</button>
+    <button data-tab="pay">Pay</button>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">Working…</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
